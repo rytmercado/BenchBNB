@@ -2,6 +2,75 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./frontend/actions/session_actions.js":
+/*!*********************************************!*\
+  !*** ./frontend/actions/session_actions.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "RECEIVE_CURRENT_USER": () => (/* binding */ RECEIVE_CURRENT_USER),
+/* harmony export */   "LOGOUT_CURRENT_USER": () => (/* binding */ LOGOUT_CURRENT_USER),
+/* harmony export */   "RECEIVE_SESSION_ERRORS": () => (/* binding */ RECEIVE_SESSION_ERRORS),
+/* harmony export */   "signup": () => (/* binding */ signup),
+/* harmony export */   "login": () => (/* binding */ login),
+/* harmony export */   "logout": () => (/* binding */ logout)
+/* harmony export */ });
+/* harmony import */ var _util_session_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/session_api_util */ "./frontend/util/session_api_util.js");
+
+var RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
+var LOGOUT_CURRENT_USER = 'LOGOUT_CURRENT_USER';
+var RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS';
+
+var receiveCurrentUser = function receiveCurrentUser(user) {
+  return {
+    type: RECEIVE_CURRENT_USER,
+    user: user
+  };
+};
+
+var logoutCurrentUser = function logoutCurrentUser() {
+  return {
+    type: LOGOUT_CURRENT_USER
+  };
+};
+
+var receiveErrors = function receiveErrors(errors) {
+  return {
+    type: RECEIVE_SESSION_ERRORS,
+    errors: errors
+  };
+};
+
+var signup = function signup(user) {
+  return function (dispatch) {
+    return (0,_util_session_api_util__WEBPACK_IMPORTED_MODULE_0__.postUser)(user).then(function (user) {
+      return dispatch(receiveCurrentUser(user));
+    }, function (err) {
+      return dispatch(receiveErrors(err.responseJSON));
+    });
+  };
+};
+var login = function login(user) {
+  return function (dispatch) {
+    return (0,_util_session_api_util__WEBPACK_IMPORTED_MODULE_0__.postSession)(user).then(function (user) {
+      return dispatch(receiveCurrentUser(user));
+    }, function (err) {
+      return dispatch(receiveErrors(err.responesJSON));
+    });
+  };
+};
+var logout = function logout() {
+  return function (dispatch) {
+    return (0,_util_session_api_util__WEBPACK_IMPORTED_MODULE_0__.deleteSession)().then(function () {
+      return dispatch(logoutCurrentUser());
+    });
+  };
+};
+
+/***/ }),
+
 /***/ "./frontend/util/session_api_util.js":
 /*!*******************************************!*\
   !*** ./frontend/util/session_api_util.js ***!
@@ -10,11 +79,11 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "signup": () => (/* binding */ signup),
-/* harmony export */   "login": () => (/* binding */ login),
-/* harmony export */   "logout": () => (/* binding */ logout)
+/* harmony export */   "postUser": () => (/* binding */ postUser),
+/* harmony export */   "postSession": () => (/* binding */ postSession),
+/* harmony export */   "deleteSession": () => (/* binding */ deleteSession)
 /* harmony export */ });
-var signup = function signup(user) {
+var postUser = function postUser(user) {
   return $.ajax({
     method: 'POST',
     url: '/api/users',
@@ -23,7 +92,7 @@ var signup = function signup(user) {
     }
   });
 };
-var login = function login(user) {
+var postSession = function postSession(user) {
   return $.ajax({
     method: 'POST',
     url: '/api/session',
@@ -32,7 +101,7 @@ var login = function login(user) {
     }
   });
 };
-var logout = function logout() {
+var deleteSession = function deleteSession() {
   return $.ajax({
     method: 'DELETE',
     url: '/api/session'
@@ -29917,14 +29986,14 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _util_session_api_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/session_api_util */ "./frontend/util/session_api_util.js");
+/* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./actions/session_actions */ "./frontend/actions/session_actions.js");
 
 
 
 document.addEventListener("DOMContentLoaded", function () {
   var root = document.getElementById("root");
   react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Welcome to BenchBnB"), root);
-  window.logout = _util_session_api_util__WEBPACK_IMPORTED_MODULE_2__.logout;
+  window.signup = _actions_session_actions__WEBPACK_IMPORTED_MODULE_2__.signup;
 });
 })();
 
