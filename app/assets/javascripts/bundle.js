@@ -375,7 +375,7 @@ var SessionForm = /*#__PURE__*/function (_React$Component) {
       var _this3 = this;
 
       return function (e) {
-        _this3.setState(_defineProperty({}, type, e.target.value));
+        return _this3.setState(_defineProperty({}, type, e.target.value));
       };
     }
   }, {
