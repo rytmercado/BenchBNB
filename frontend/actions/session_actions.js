@@ -26,7 +26,7 @@ export const signup = user => dispatch =>
 export const login = user => dispatch =>
     postSession(user)
         .then(user => dispatch(receiveCurrentUser(user)),
-        err => dispatch(receiveErrors(err.responesJSON)));
+        err => dispatch(receiveErrors(err.responseJSON)));
 
 export const logout = () => dispatch =>
     deleteSession()
