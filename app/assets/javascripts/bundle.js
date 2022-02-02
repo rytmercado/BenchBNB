@@ -271,11 +271,30 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(BenchMap, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      // set the map to show SF
+      var mapOptions = {
+        center: {
+          lat: 37.7758,
+          lng: -122.435
+        },
+        // this is SF
+        zoom: 13
+      }; // wrap this.mapNode in a Google Map
+
+      this.map = new google.maps.Map(this.mapNode, mapOptions);
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this = this;
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         id: "map-container",
-        ref: "map"
+        ref: function ref(map) {
+          return _this.mapNode = map;
+        }
       });
     }
   }]);
