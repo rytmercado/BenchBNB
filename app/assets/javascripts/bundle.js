@@ -34,6 +34,28 @@ var fetchBenches = function fetchBenches() {
 
 /***/ }),
 
+/***/ "./frontend/actions/filter_actions.js":
+/*!********************************************!*\
+  !*** ./frontend/actions/filter_actions.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UPDATE_BOUNDS": () => (/* binding */ UPDATE_BOUNDS),
+/* harmony export */   "updateBounds": () => (/* binding */ updateBounds)
+/* harmony export */ });
+var UPDATE_BOUNDS = 'UPDATE_BOUNDS';
+var updateBounds = function updateBounds(bounds) {
+  return {
+    type: UPDATE_BOUNDS,
+    bounds: bounds
+  };
+};
+
+/***/ }),
+
 /***/ "./frontend/actions/session_actions.js":
 /*!*********************************************!*\
   !*** ./frontend/actions/session_actions.js ***!
@@ -275,6 +297,8 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
   _createClass(BenchMap, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      var _this = this;
+
       // set the map to show SF
       var mapOptions = {
         center: {
@@ -288,6 +312,25 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
       this.map = new google.maps.Map(this.mapNode, mapOptions);
       this.MarkerManager = new _util_marker_manager__WEBPACK_IMPORTED_MODULE_1__["default"](this.map);
       this.MarkerManager.updateMarkers();
+      this.map.addListener("idle", function () {
+        var latLngBounds = _this.map.getBounds();
+
+        var nE = latLngBounds.getNorthEast();
+        var sW = latLngBounds.getSouthWest();
+        console.log(nE.lat());
+        var bounds = {
+          "northEast": {
+            "lat": nE.lat(),
+            "lng": nE.lng()
+          },
+          "southWest": {
+            "lat": sW.lat(),
+            "lng": sW.lng()
+          }
+        };
+
+        _this.props.updateBounds(bounds);
+      });
     }
   }, {
     key: "componentDidUpdate",
@@ -298,12 +341,12 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         id: "map-container",
         ref: function ref(map) {
-          return _this.mapNode = map;
+          return _this2.mapNode = map;
         }
       });
     }
@@ -336,9 +379,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var Search = function Search(_ref) {
   var fetchBenches = _ref.fetchBenches,
-      benches = _ref.benches;
+      benches = _ref.benches,
+      updateBounds = _ref.updateBounds;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_bench_map__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    benches: benches
+    benches: benches,
+    updateBounds: updateBounds
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_bench_index__WEBPACK_IMPORTED_MODULE_2__["default"], {
     fetchBenches: fetchBenches,
     benches: benches
@@ -362,7 +407,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _actions_bench_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/bench_actions */ "./frontend/actions/bench_actions.js");
-/* harmony import */ var _search__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./search */ "./frontend/components/benches/search.jsx");
+/* harmony import */ var _actions_filter_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/filter_actions */ "./frontend/actions/filter_actions.js");
+/* harmony import */ var _search__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./search */ "./frontend/components/benches/search.jsx");
+
 
 
 
@@ -377,11 +424,14 @@ var mdtp = function mdtp(dispatch) {
   return {
     fetchBenches: function fetchBenches() {
       return dispatch((0,_actions_bench_actions__WEBPACK_IMPORTED_MODULE_1__.fetchBenches)());
+    },
+    updateBounds: function updateBounds(bounds) {
+      return dispatch((0,_actions_filter_actions__WEBPACK_IMPORTED_MODULE_2__.updateBounds)(bounds));
     }
   };
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_0__.connect)(mstp, mdtp)(_search__WEBPACK_IMPORTED_MODULE_2__["default"]));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_0__.connect)(mstp, mdtp)(_search__WEBPACK_IMPORTED_MODULE_3__["default"]));
 
 /***/ }),
 
@@ -994,10 +1044,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "fetchBenches": () => (/* binding */ fetchBenches)
 /* harmony export */ });
-var fetchBenches = function fetchBenches() {
+var fetchBenches = function fetchBenches(filters) {
   return $.ajax({
     method: 'GET',
     url: '/api/benches',
+    filters: filters,
     error: function error(err) {
       return console.log(err);
     }

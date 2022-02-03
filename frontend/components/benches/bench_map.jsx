@@ -17,6 +17,20 @@ export default class BenchMap extends React.Component {
         this.map = new google.maps.Map(this.mapNode, mapOptions);
         this.MarkerManager = new MarkerManager(this.map);
         this.MarkerManager.updateMarkers();
+
+        this.map.addListener("idle", () => {
+            const latLngBounds = this.map.getBounds();
+            const nE = latLngBounds.getNorthEast();
+            const sW = latLngBounds.getSouthWest();
+            console.log(nE.lat());
+
+            const bounds = {
+                "northEast": {"lat": nE.lat(),"lng": nE.lng()},
+                "southWest": {"lat": sW.lat(), "lng": sW.lng()}
+                }
+
+            this.props.updateBounds(bounds);
+        })
       }
 
     componentDidUpdate(){
