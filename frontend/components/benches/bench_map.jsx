@@ -22,8 +22,6 @@ export default class BenchMap extends React.Component {
             const latLngBounds = this.map.getBounds();
             const nE = latLngBounds.getNorthEast();
             const sW = latLngBounds.getSouthWest();
-            console.log(nE.lat());
-
             const bounds = {
                 "northEast": {"lat": nE.lat(),"lng": nE.lng()},
                 "southWest": {"lat": sW.lat(), "lng": sW.lng()}
@@ -34,7 +32,7 @@ export default class BenchMap extends React.Component {
       }
 
     componentDidUpdate(){
-            this.MarkerManager = new MarkerManager(this.map);
+            // this.MarkerManager = new MarkerManager(this.map);
             this.MarkerManager.updateMarkers(this.props.benches);
     }
 

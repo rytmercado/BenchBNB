@@ -2,22 +2,24 @@ export default class MarkerManager {
     constructor(map) {
       this.map = map;
       this.markers = {};
-
-    //   debugger
     }
 
     updateMarkers(benches) {
-        console.log(this.markers)
         benches.forEach(bench => {
             if (!this.markers.hasOwnProperty(bench.id)){
-                // this.markers[bench.id] = bench;
                 this.createMarkerFromBench(bench);
             }
         })
-        
+
         let benchObj = this.toObject(benches);
-        console.log(benchObj)
-        console.log(this.markers)
+
+        for (let key in this.markers) {
+            if (!benchObj.hasOwnProperty(key)) {
+                delete this.markers[key];
+            }
+        }
+
+        // if marker obj has property, and bench obj does not - remove that marker from map and this.markers
     }
 
     toObject(benchArr) {
@@ -28,6 +30,10 @@ export default class MarkerManager {
         }
 
         return benchObj;
+    }
+
+    removeMarker(marker) {
+        delete this.markers[marker.id]
     }
 
     createMarkerFromBench(bench) {

@@ -326,7 +326,6 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
 
         var nE = latLngBounds.getNorthEast();
         var sW = latLngBounds.getSouthWest();
-        console.log(nE.lat());
         var bounds = {
           "northEast": {
             "lat": nE.lat(),
@@ -344,7 +343,7 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
-      this.MarkerManager = new _util_marker_manager__WEBPACK_IMPORTED_MODULE_1__["default"](this.map);
+      // this.MarkerManager = new MarkerManager(this.map);
       this.MarkerManager.updateMarkers(this.props.benches);
     }
   }, {
@@ -1113,7 +1112,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "fetchBenches": () => (/* binding */ fetchBenches)
 /* harmony export */ });
 var fetchBenches = function fetchBenches(filters) {
-  console.log(filters);
   return $.ajax({
     method: 'GET',
     url: '/api/benches',
@@ -1148,7 +1146,7 @@ var MarkerManager = /*#__PURE__*/function () {
     _classCallCheck(this, MarkerManager);
 
     this.map = map;
-    this.markers = {}; //   debugger
+    this.markers = {};
   }
 
   _createClass(MarkerManager, [{
@@ -1156,16 +1154,19 @@ var MarkerManager = /*#__PURE__*/function () {
     value: function updateMarkers(benches) {
       var _this = this;
 
-      console.log(this.markers);
       benches.forEach(function (bench) {
         if (!_this.markers.hasOwnProperty(bench.id)) {
-          // this.markers[bench.id] = bench;
           _this.createMarkerFromBench(bench);
         }
       });
       var benchObj = this.toObject(benches);
-      console.log(benchObj);
-      console.log(this.markers);
+
+      for (var key in this.markers) {
+        if (!benchObj.hasOwnProperty(key)) {
+          delete this.markers[key];
+        }
+      } // if marker obj has property, and bench obj does not - remove that marker from map and this.markers
+
     }
   }, {
     key: "toObject",
@@ -1178,6 +1179,11 @@ var MarkerManager = /*#__PURE__*/function () {
       }
 
       return benchObj;
+    }
+  }, {
+    key: "removeMarker",
+    value: function removeMarker(marker) {
+      delete this.markers[marker.id];
     }
   }, {
     key: "createMarkerFromBench",
