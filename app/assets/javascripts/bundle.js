@@ -257,8 +257,8 @@ var BenchForm = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       description: '',
       num_seats: 0,
-      lat: 0,
-      lng: 0
+      lat: _this.props.lat,
+      lng: _this.props.lng
     };
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
@@ -278,7 +278,9 @@ var BenchForm = /*#__PURE__*/function (_React$Component) {
     value: function handleSubmit() {
       //   console.log(this.props)
       // debugger
+      console.log(this.state);
       this.props.createBench(this.state);
+      this.props.history.push('/');
     }
   }, {
     key: "render",
@@ -288,16 +290,16 @@ var BenchForm = /*#__PURE__*/function (_React$Component) {
         value: this.state.description,
         onChange: this.handleInput('description')
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Number of Seats:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        type: "text",
+        type: "number",
         value: this.state.num_seats,
         onChange: this.handleInput('num_seats')
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Latitude:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        type: "text",
+        type: "float",
         value: this.props.lat,
         onChange: this.handleInput('lat'),
         disabled: true
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Longitude:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-        type: "text",
+        type: "float",
         value: this.props.lng,
         onChange: this.handleInput('lng'),
         disabled: true

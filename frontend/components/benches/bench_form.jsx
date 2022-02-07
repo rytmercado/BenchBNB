@@ -6,8 +6,8 @@ export default class BenchForm extends React.Component {
         this.state = {
             description: '',
             num_seats: 0,
-            lat: 0,
-            lng: 0,
+            lat: this.props.lat,
+            lng: this.props.lng,
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -22,7 +22,9 @@ export default class BenchForm extends React.Component {
       handleSubmit() {
         //   console.log(this.props)
         // debugger
+        console.log(this.state)
         this.props.createBench(this.state);
+        this.props.history.push('/');
       }
     
     render() {
@@ -33,13 +35,13 @@ export default class BenchForm extends React.Component {
                     <input type="text" value={this.state.description} onChange={this.handleInput('description')} />
                 </label>
                 <label>Number of Seats:
-                    <input type="text" value={this.state.num_seats} onChange={this.handleInput('num_seats')} />
+                    <input type="number" value={this.state.num_seats} onChange={this.handleInput('num_seats')} />
                 </label>
                 <label>Latitude:
-                    <input type="text" value={this.props.lat} onChange={this.handleInput('lat')} disabled/>
+                    <input type="float" value={this.props.lat} onChange={this.handleInput('lat')} disabled/>
                 </label>
                 <label>Longitude:
-                    <input type="text" value={this.props.lng} onChange={this.handleInput('lng')} disabled/>
+                    <input type="float" value={this.props.lng} onChange={this.handleInput('lng')} disabled/>
                 </label>
                 <input type="submit" value='Add Bench' onClick={this.handleSubmit}/>
             </form>
