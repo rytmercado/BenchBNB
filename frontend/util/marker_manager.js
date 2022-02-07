@@ -7,26 +7,38 @@ export default class MarkerManager {
     }
 
     updateMarkers(benches) {
-        console.log(benches);
+        console.log(this.markers)
         benches.forEach(bench => {
-            // if (!this.markers.hasOwnProperty(bench.id)){
-            //     this.markers[bench.id] = bench;
-            // }
-            this.createMarkerFromBench(bench);
+            if (!this.markers.hasOwnProperty(bench.id)){
+                // this.markers[bench.id] = bench;
+                this.createMarkerFromBench(bench);
+            }
         })
+        
+        let benchObj = this.toObject(benches);
+        console.log(benchObj)
+        console.log(this.markers)
+    }
+
+    toObject(benchArr) {
+        const benchObj = {};
+        for (let i = 0; i < benchArr.length; i++) {
+            let bench = benchArr[i];
+            benchObj[bench.id] = bench;
+        }
+
+        return benchObj;
     }
 
     createMarkerFromBench(bench) {
         
-        this.markers[bench.id] = bench;
         const latLng = new google.maps.LatLng(bench.lat, bench.lng);
-        console.log(latLng);
-        const marker = new google.maps.Marker({
+        this.markers[bench.id] = new google.maps.Marker({
             position: latLng,
             title: bench.description
         });
 
-        marker.setMap(this.map);
+        this.markers[bench.id].setMap(this.map);
     }
     //...
   }

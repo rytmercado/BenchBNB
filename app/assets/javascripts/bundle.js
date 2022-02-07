@@ -1156,25 +1156,38 @@ var MarkerManager = /*#__PURE__*/function () {
     value: function updateMarkers(benches) {
       var _this = this;
 
-      console.log(benches);
+      console.log(this.markers);
       benches.forEach(function (bench) {
-        // if (!this.markers.hasOwnProperty(bench.id)){
-        //     this.markers[bench.id] = bench;
-        // }
-        _this.createMarkerFromBench(bench);
+        if (!_this.markers.hasOwnProperty(bench.id)) {
+          // this.markers[bench.id] = bench;
+          _this.createMarkerFromBench(bench);
+        }
       });
+      var benchObj = this.toObject(benches);
+      console.log(benchObj);
+      console.log(this.markers);
+    }
+  }, {
+    key: "toObject",
+    value: function toObject(benchArr) {
+      var benchObj = {};
+
+      for (var i = 0; i < benchArr.length; i++) {
+        var bench = benchArr[i];
+        benchObj[bench.id] = bench;
+      }
+
+      return benchObj;
     }
   }, {
     key: "createMarkerFromBench",
     value: function createMarkerFromBench(bench) {
-      this.markers[bench.id] = bench;
       var latLng = new google.maps.LatLng(bench.lat, bench.lng);
-      console.log(latLng);
-      var marker = new google.maps.Marker({
+      this.markers[bench.id] = new google.maps.Marker({
         position: latLng,
         title: bench.description
       });
-      marker.setMap(this.map);
+      this.markers[bench.id].setMap(this.map);
     } //...
 
   }]);
