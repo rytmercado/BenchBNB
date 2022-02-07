@@ -1,10 +1,12 @@
 import React from 'react';
 import MarkerManager from '../../util/marker_manager';
-import withRouter from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 class BenchMap extends React.Component {
     constructor(props) {
         super(props);
+
+        // this.mapClick = this.mapClick.bind(this.mapClick)
     }
 
     componentDidMount() {
@@ -30,6 +32,17 @@ class BenchMap extends React.Component {
 
             this.props.updateFilter('bounds', bounds);
         })
+
+        this.map.addListener("click", (mouseEvent) => {
+            const mouseLat = mouseEvent.latLng.lat();
+            const mouseLng = mouseEvent.latLng.lng();
+            const coords = {
+                lat: mouseLat,
+                lng: mouseLng
+            }
+            this._handleClick(coords);
+
+        })
       }
 
     componentDidUpdate(){
@@ -37,11 +50,21 @@ class BenchMap extends React.Component {
             this.MarkerManager.updateMarkers(this.props.benches);
     }
 
+    _handleClick(coords){
+        this.props.history.push({
+            pathname: "benches/new",
+            search: `lat=${coords.lat}&lng=${coords.lng}`
+          });
+    }
+
     render() {
         return(
             <div 
                 id='map-container'
-                ref={ map => this.mapNode = map }>
+                ref={ map => this.mapNode = map }
+                // onClick={this.mapClick}>
+                >
+
             </div>
         )
     }

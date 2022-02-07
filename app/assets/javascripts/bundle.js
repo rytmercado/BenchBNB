@@ -404,7 +404,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _util_marker_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/marker_manager */ "./frontend/util/marker_manager.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -439,7 +439,7 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
   function BenchMap(props) {
     _classCallCheck(this, BenchMap);
 
-    return _super.call(this, props);
+    return _super.call(this, props); // this.mapClick = this.mapClick.bind(this.mapClick)
   }
 
   _createClass(BenchMap, [{
@@ -478,12 +478,30 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
 
         _this.props.updateFilter('bounds', bounds);
       });
+      this.map.addListener("click", function (mouseEvent) {
+        var mouseLat = mouseEvent.latLng.lat();
+        var mouseLng = mouseEvent.latLng.lng();
+        var coords = {
+          lat: mouseLat,
+          lng: mouseLng
+        };
+
+        _this._handleClick(coords);
+      });
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
       // this.MarkerManager = new MarkerManager(this.map);
       this.MarkerManager.updateMarkers(this.props.benches);
+    }
+  }, {
+    key: "_handleClick",
+    value: function _handleClick(coords) {
+      this.props.history.push({
+        pathname: "benches/new",
+        search: "lat=".concat(coords.lat, "&lng=").concat(coords.lng)
+      });
     }
   }, {
     key: "render",
@@ -494,7 +512,8 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
         id: "map-container",
         ref: function ref(map) {
           return _this2.mapNode = map;
-        }
+        } // onClick={this.mapClick}>
+
       });
     }
   }]);
@@ -502,7 +521,7 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
   return BenchMap;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__["default"])(BenchMap));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.withRouter)(BenchMap));
 
 /***/ }),
 
