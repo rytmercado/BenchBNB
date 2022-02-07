@@ -22,11 +22,14 @@ var receiveBenches = function receiveBenches(benches) {
     type: RECEIVE_BENCHES,
     benches: benches
   };
-};
+}; // export const fetchBenches = (filters) => dispatch =>
+//     BenchApiUtil.fetchBenches(filters)
+//         .then(benches => dispatch(receiveBenches(benches)))
 
-var fetchBenches = function fetchBenches() {
-  return function (dispatch) {
-    return _util_bench_api_util__WEBPACK_IMPORTED_MODULE_0__.fetchBenches().then(function (benches) {
+
+var fetchBenches = function fetchBenches(data) {
+  return function (dispatch, getState) {
+    return _util_bench_api_util__WEBPACK_IMPORTED_MODULE_0__.fetchBenches(data).then(function (benches) {
       return dispatch(receiveBenches(benches));
     });
   };
@@ -43,16 +46,26 @@ var fetchBenches = function fetchBenches() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UPDATE_BOUNDS": () => (/* binding */ UPDATE_BOUNDS),
-/* harmony export */   "updateBounds": () => (/* binding */ updateBounds)
+/* harmony export */   "UPDATE_FILTERS": () => (/* binding */ UPDATE_FILTERS),
+/* harmony export */   "changeFilter": () => (/* binding */ changeFilter),
+/* harmony export */   "updateFilter": () => (/* binding */ updateFilter)
 /* harmony export */ });
-var UPDATE_BOUNDS = 'UPDATE_BOUNDS';
-var updateBounds = function updateBounds(bounds) {
+/* harmony import */ var _bench_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bench_actions */ "./frontend/actions/bench_actions.js");
+
+var UPDATE_FILTERS = 'UPDATE_FILTERS';
+var changeFilter = function changeFilter(filter, value) {
   return {
-    type: UPDATE_BOUNDS,
-    bounds: bounds
+    type: UPDATE_FILTERS,
+    filter: filter,
+    value: value
   };
 };
+function updateFilter(filter, value) {
+  return function (dispatch, getState) {
+    dispatch(changeFilter(filter, value));
+    return (0,_bench_actions__WEBPACK_IMPORTED_MODULE_0__.fetchBenches)(getState().ui)(dispatch); // delicious curry!
+  };
+}
 
 /***/ }),
 
@@ -219,12 +232,8 @@ var BenchIndex = /*#__PURE__*/function (_React$Component) {
 
   _createClass(BenchIndex, [{
     key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this = this;
-
-      this.props.fetchBenches().then(function (res) {
-        _this.setState(_this.props.bench);
-      });
+    value: function componentDidMount() {//   this.props.fetchBenches(this.props.filters)
+      //   .then((res) => {this.setState(this.props.bench)})
     }
   }, {
     key: "render",
@@ -311,7 +320,7 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
 
       this.map = new google.maps.Map(this.mapNode, mapOptions);
       this.MarkerManager = new _util_marker_manager__WEBPACK_IMPORTED_MODULE_1__["default"](this.map);
-      this.MarkerManager.updateMarkers();
+      this.MarkerManager.updateMarkers(this.props.benches);
       this.map.addListener("idle", function () {
         var latLngBounds = _this.map.getBounds();
 
@@ -329,14 +338,14 @@ var BenchMap = /*#__PURE__*/function (_React$Component) {
           }
         };
 
-        _this.props.updateBounds(bounds);
+        _this.props.updateFilter('bounds', bounds);
       });
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
       this.MarkerManager = new _util_marker_manager__WEBPACK_IMPORTED_MODULE_1__["default"](this.map);
-      this.MarkerManager.updateMarkers();
+      this.MarkerManager.updateMarkers(this.props.benches);
     }
   }, {
     key: "render",
@@ -380,10 +389,10 @@ __webpack_require__.r(__webpack_exports__);
 var Search = function Search(_ref) {
   var fetchBenches = _ref.fetchBenches,
       benches = _ref.benches,
-      updateBounds = _ref.updateBounds;
+      updateFilter = _ref.updateFilter;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_bench_map__WEBPACK_IMPORTED_MODULE_1__["default"], {
     benches: benches,
-    updateBounds: updateBounds
+    updateFilter: updateFilter
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_bench_index__WEBPACK_IMPORTED_MODULE_2__["default"], {
     fetchBenches: fetchBenches,
     benches: benches
@@ -416,17 +425,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var mstp = function mstp(state) {
   return {
-    benches: Object.values(state.entities.benches)
+    benches: Object.values(state.entities.benches),
+    filters: Object.values(state.ui.filters)
   };
 };
 
 var mdtp = function mdtp(dispatch) {
   return {
-    fetchBenches: function fetchBenches() {
-      return dispatch((0,_actions_bench_actions__WEBPACK_IMPORTED_MODULE_1__.fetchBenches)());
-    },
-    updateBounds: function updateBounds(bounds) {
-      return dispatch((0,_actions_filter_actions__WEBPACK_IMPORTED_MODULE_2__.updateBounds)(bounds));
+    // fetchBenches: (filters) => dispatch(fetchBenches(filters)),
+    // updateBounds: bounds => dispatch(updateBounds(bounds))
+    updateFilter: function updateFilter(filter, value) {
+      return dispatch((0,_actions_filter_actions__WEBPACK_IMPORTED_MODULE_2__.updateFilter)(filter, value));
     }
   };
 };
@@ -884,22 +893,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _actions_filter_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/filter_actions */ "./frontend/actions/filter_actions.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
+
+
+var filterReducer = function filterReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments.length > 1 ? arguments[1] : undefined;
   Object.freeze(state);
 
   switch (action.type) {
-    case _actions_filter_actions__WEBPACK_IMPORTED_MODULE_0__.UPDATE_BOUNDS:
-      return Object.assign({}, state, {
-        bounds: action.bounds
-      });
+    case _actions_filter_actions__WEBPACK_IMPORTED_MODULE_0__.UPDATE_FILTERS:
+      return Object.assign({}, state, _defineProperty({}, action.filter, action.value));
 
     default:
       return state;
   }
-});
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (filterReducer);
 
 /***/ }),
 
@@ -1101,10 +1113,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "fetchBenches": () => (/* binding */ fetchBenches)
 /* harmony export */ });
 var fetchBenches = function fetchBenches(filters) {
+  console.log(filters);
   return $.ajax({
     method: 'GET',
     url: '/api/benches',
-    filters: filters,
+    data: filters,
     error: function error(err) {
       return console.log(err);
     }
@@ -1135,31 +1148,33 @@ var MarkerManager = /*#__PURE__*/function () {
     _classCallCheck(this, MarkerManager);
 
     this.map = map;
-    this.markers = {}; //   let testBench = {description: 'Bench 6', lat: 37.733082, lng: -122.438545};
-    //   this.createMarkerFromBench(testBench);
+    this.markers = {}; //   debugger
   }
 
   _createClass(MarkerManager, [{
     key: "updateMarkers",
     value: function updateMarkers(benches) {
-      console.log(benches); // benches.forEach(bench => {
-      //     if (!this.markers.hasOwnProperty(bench.id)){
-      //         this.markers[bench.id] = bench;
-      //     }
-      // })
+      var _this = this;
+
+      console.log(benches);
+      benches.forEach(function (bench) {
+        // if (!this.markers.hasOwnProperty(bench.id)){
+        //     this.markers[bench.id] = bench;
+        // }
+        _this.createMarkerFromBench(bench);
+      });
     }
   }, {
     key: "createMarkerFromBench",
     value: function createMarkerFromBench(bench) {
       this.markers[bench.id] = bench;
-      new google.maps.Marker({
-        position: {
-          lat: bench.lat,
-          lng: bench.lng
-        },
-        map: map,
+      var latLng = new google.maps.LatLng(bench.lat, bench.lng);
+      console.log(latLng);
+      var marker = new google.maps.Marker({
+        position: latLng,
         title: bench.description
       });
+      marker.setMap(this.map);
     } //...
 
   }]);

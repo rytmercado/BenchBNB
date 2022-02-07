@@ -2,27 +2,31 @@ export default class MarkerManager {
     constructor(map) {
       this.map = map;
       this.markers = {};
-    //   let testBench = {description: 'Bench 6', lat: 37.733082, lng: -122.438545};
-    //   this.createMarkerFromBench(testBench);
+
+    //   debugger
     }
 
     updateMarkers(benches) {
         console.log(benches);
-        // benches.forEach(bench => {
-        //     if (!this.markers.hasOwnProperty(bench.id)){
-        //         this.markers[bench.id] = bench;
-        //     }
-        // })
+        benches.forEach(bench => {
+            // if (!this.markers.hasOwnProperty(bench.id)){
+            //     this.markers[bench.id] = bench;
+            // }
+            this.createMarkerFromBench(bench);
+        })
     }
 
     createMarkerFromBench(bench) {
+        
         this.markers[bench.id] = bench;
-
-        new google.maps.Marker({
-            position: { lat: bench.lat, lng: bench.lng },
-            map,
+        const latLng = new google.maps.LatLng(bench.lat, bench.lng);
+        console.log(latLng);
+        const marker = new google.maps.Marker({
+            position: latLng,
             title: bench.description
-        })
+        });
+
+        marker.setMap(this.map);
     }
     //...
   }

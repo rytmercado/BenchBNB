@@ -1,8 +1,10 @@
 class Api::BenchesController < ApplicationController
     def index
         # p params[:bounds]
-        # @benches = Bench.in_bounds(params[:bounds])
-        @benches = Bench.all #change to above later.
+        @benches = Bench.in_bounds(params['filters']['bounds'])
+        # p params
+        # debugger
+        # @benches = Bench.all #change to above later.
         render :index
     end
 
