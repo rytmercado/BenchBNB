@@ -12,7 +12,7 @@ export const fetchBenches = (filters) => {
     return $.ajax({
       method: 'POST',
       url: '/api/benches',
-      data: bench,
+      data: { bench: bench},
       error: (err) => console.log(err)
     })
   }

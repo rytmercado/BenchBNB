@@ -6,6 +6,7 @@ class Api::BenchesController < ApplicationController
     end
 
     def create
+        # debugger
         @bench = Bench.new(bench_params)
 
         if @bench.save
@@ -18,7 +19,7 @@ class Api::BenchesController < ApplicationController
     private
 
     def bench_params
-        params.require(:bench).permit(:description, :lat, :lng)
+        params.require(:bench).permit(:description, :num_seats, :lat, :lng)
     end
 
 end

@@ -11,16 +11,26 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RECEIVE_BENCHES": () => (/* binding */ RECEIVE_BENCHES),
-/* harmony export */   "fetchBenches": () => (/* binding */ fetchBenches)
+/* harmony export */   "RECEIVE_BENCH": () => (/* binding */ RECEIVE_BENCH),
+/* harmony export */   "fetchBenches": () => (/* binding */ fetchBenches),
+/* harmony export */   "createBench": () => (/* binding */ createBench)
 /* harmony export */ });
 /* harmony import */ var _util_bench_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/bench_api_util */ "./frontend/util/bench_api_util.js");
 
 var RECEIVE_BENCHES = 'RECEIVE_BENCHES';
+var RECEIVE_BENCH = 'RECEIVE_BENCH';
 
 var receiveBenches = function receiveBenches(benches) {
   return {
     type: RECEIVE_BENCHES,
     benches: benches
+  };
+};
+
+var receiveBench = function receiveBench(bench) {
+  return {
+    type: RECEIVE_BENCH,
+    bench: bench
   };
 }; // export const fetchBenches = (filters) => dispatch =>
 //     BenchApiUtil.fetchBenches(filters)
@@ -31,6 +41,13 @@ var fetchBenches = function fetchBenches(data) {
   return function (dispatch, getState) {
     return _util_bench_api_util__WEBPACK_IMPORTED_MODULE_0__.fetchBenches(data).then(function (benches) {
       return dispatch(receiveBenches(benches));
+    });
+  };
+};
+var createBench = function createBench(data) {
+  return function (dispatch) {
+    return _util_bench_api_util__WEBPACK_IMPORTED_MODULE_0__.createBench(data).then(function (bench) {
+      return dispatch(receiveBench(bench));
     });
   };
 };
@@ -243,6 +260,7 @@ var BenchForm = /*#__PURE__*/function (_React$Component) {
       lat: 0,
       lng: 0
     };
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -257,7 +275,11 @@ var BenchForm = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "handleSubmit",
-    value: function handleSubmit() {}
+    value: function handleSubmit() {
+      //   console.log(this.props)
+      // debugger
+      this.props.createBench(this.state);
+    }
   }, {
     key: "render",
     value: function render() {
@@ -265,23 +287,25 @@ var BenchForm = /*#__PURE__*/function (_React$Component) {
         type: "text",
         value: this.state.description,
         onChange: this.handleInput('description')
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Description:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Number of Seats:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         type: "text",
         value: this.state.num_seats,
         onChange: this.handleInput('num_seats')
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Description:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Latitude:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         type: "text",
-        value: this.state.lat,
-        onChange: this.handleInput('lat')
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Description:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+        value: this.props.lat,
+        onChange: this.handleInput('lat'),
+        disabled: true
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Longitude:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         type: "text",
-        value: this.state.lng,
-        onChange: this.handleInput('lng')
+        value: this.props.lng,
+        onChange: this.handleInput('lng'),
+        disabled: true
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
         type: "submit",
-        value: this.state,
+        value: "Add Bench",
         onClick: this.handleSubmit
-      }), "Add Map"));
+      })));
     }
   }]);
 
@@ -304,19 +328,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _bench_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bench_form */ "./frontend/components/benches/bench_form.jsx");
+/* harmony import */ var _actions_bench_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/bench_actions */ "./frontend/actions/bench_actions.js");
+/* harmony import */ var _bench_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./bench_form */ "./frontend/components/benches/bench_form.jsx");
 
 
 
-var mstp = function mstp(state) {
-  return {};
+
+var mstp = function mstp(state, _ref) {
+  var location = _ref.location;
+  return {
+    lat: new URLSearchParams(location.search).get("lat"),
+    lng: new URLSearchParams(location.search).get("lng")
+  };
 };
 
 var mdtp = function mdtp(dispatch) {
-  return {};
+  return {
+    createBench: function createBench(bench) {
+      return dispatch((0,_actions_bench_actions__WEBPACK_IMPORTED_MODULE_1__.createBench)(bench));
+    }
+  };
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_0__.connect)(mstp, mdtp)(_bench_form__WEBPACK_IMPORTED_MODULE_1__["default"]));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_0__.connect)(mstp, mdtp)(_bench_form__WEBPACK_IMPORTED_MODULE_2__["default"]));
 
 /***/ }),
 
@@ -977,10 +1011,15 @@ var benchesReducer = function benchesReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments.length > 1 ? arguments[1] : undefined;
   Object.freeze(state);
+  var newState = Object.assign({}, state);
 
   switch (action.type) {
     case _actions_bench_actions__WEBPACK_IMPORTED_MODULE_0__.RECEIVE_BENCHES:
       return action.benches;
+
+    case _actions_bench_actions__WEBPACK_IMPORTED_MODULE_0__.RECEIVE_BENCH:
+      newState[action.bench.id] = action.bench;
+      return newState;
 
     default:
       return state;
@@ -1284,7 +1323,9 @@ var createBench = function createBench(bench) {
   return $.ajax({
     method: 'POST',
     url: '/api/benches',
-    data: bench,
+    data: {
+      bench: bench
+    },
     error: function error(err) {
       return console.log(err);
     }
