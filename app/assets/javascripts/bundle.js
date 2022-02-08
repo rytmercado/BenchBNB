@@ -1454,11 +1454,9 @@ var Auth = function Auth(_ref) {
 var Protected = function Protected(_ref2) {
   var loggedIn = _ref2.loggedIn,
       path = _ref2.path,
-      Component = _ref2.component,
-      exact = _ref2.exact;
+      Component = _ref2.component;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
     path: path,
-    exact: exact,
     render: function render(props) {
       return loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Component, props) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Redirect, {
         to: "/login"
@@ -38883,15 +38881,10 @@ document.addEventListener("DOMContentLoaded", function () {
     store = (0,_store_store__WEBPACK_IMPORTED_MODULE_2__["default"])();
   }
 
-  window.getState = store.getState;
-  window.dispatch = store.dispatch;
-  window.fetchBenches = _actions_bench_actions__WEBPACK_IMPORTED_MODULE_5__.fetchBenches;
   var root = document.getElementById("root");
   react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_root__WEBPACK_IMPORTED_MODULE_3__["default"], {
     store: store
   }), root);
-  window.signup = _actions_session_actions__WEBPACK_IMPORTED_MODULE_4__.signup;
-  window.login = _actions_session_actions__WEBPACK_IMPORTED_MODULE_4__.login;
 });
 })();
 
