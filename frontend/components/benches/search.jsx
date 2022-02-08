@@ -8,8 +8,8 @@ const Search = ({fetchBenches, benches, updateFilter, filters}) =>  (
         <div className='search-rows'>
             <BenchMap benches={benches} updateFilter={updateFilter}/>
             <div>
-            <FilterForm updateFilter={updateFilter} filters={filters}/>
-            <BenchIndex fetchBenches={fetchBenches} benches={benches}/>
+                <FilterForm updateFilter={updateFilter} filters={filters}/>
+                <BenchIndex fetchBenches={fetchBenches} benches={benches}/>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@ export default class BenchForm extends React.Component {
             lng: this.props.lng,
         }
 
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleInput(type) {
@@ -19,13 +19,10 @@ export default class BenchForm extends React.Component {
         }
       }
 
-      handleSubmit() {
-        //   console.log(this.props)
-        // debugger
-        console.log(this.state)
-        this.props.createBench(this.state);
-        this.props.history.push('/');
-      }
+    handleSubmit() {
+    this.props.createBench(this.state);
+    this.props.history.push('/');
+    }
     
     render() {
         return(

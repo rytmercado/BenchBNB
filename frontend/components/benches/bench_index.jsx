@@ -4,14 +4,8 @@ export default class BenchIndex extends React.Component {
     constructor(props) {
         super(props);
     }
-
-    componentDidMount() {
-    //   this.props.fetchBenches(this.props.filters)
-    //   .then((res) => {this.setState(this.props.bench)})
-    }
   
     render() {
-      // ...
       return(
 
       <div>
@@ -20,16 +14,11 @@ export default class BenchIndex extends React.Component {
                 return(
                     <div key={bench.id}>
                         <li>{bench.description}</li>
-                        {/* <li>{bench.lat}</li>
-                        <li>{bench.lng}</li>
-                        <br/> */}
                     </div>
                 )
             })}
         </ul>
       </div>
       )
- 
-
     }
   }

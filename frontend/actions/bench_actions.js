@@ -11,11 +11,7 @@ const receiveBenches = benches => ({
 const receiveBench = bench => ({
     type: RECEIVE_BENCH,
     bench
-})
-
-// export const fetchBenches = (filters) => dispatch =>
-//     BenchApiUtil.fetchBenches(filters)
-//         .then(benches => dispatch(receiveBenches(benches)))
+});
 
 export const fetchBenches = (data) => (dispatch, getState) => {
     return BenchApiUtil.fetchBenches(data).then(benches => dispatch(receiveBenches(benches)))
