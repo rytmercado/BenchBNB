@@ -5,7 +5,7 @@ import Search from './search'
 
 const mstp = (state) => ({
     benches: Object.values(state.entities.benches),
-    filters: Object.values(state.ui.filters)
+    filters: state.ui.filters
 });
 
 const mdtp = dispatch => ({

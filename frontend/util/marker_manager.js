@@ -15,7 +15,7 @@ export default class MarkerManager {
 
         for (let key in this.markers) {
             if (!benchObj.hasOwnProperty(key)) {
-                delete this.markers[key];
+                this.removeMarker(this.markers[key])
             }
         }
 
@@ -33,7 +33,7 @@ export default class MarkerManager {
     }
 
     removeMarker(marker) {
-        delete this.markers[marker.id]
+        marker.setVisible(false);
     }
 
     createMarkerFromBench(bench) {

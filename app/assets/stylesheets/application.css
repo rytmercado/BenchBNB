@@ -21,11 +21,9 @@
  #map-container {
      width: 500px;
      height: 500px;
-     /* cursor: crosshair; */
- }
+}
 
  header {
-    /* margin-left: 5%; */
     margin: 5%
 }
 
@@ -34,8 +32,6 @@
      font-size: 2em;
      font-weight: bold;
      text-decoration: none;
-
-
  }
 
  .search-container {
