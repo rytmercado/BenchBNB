@@ -38,10 +38,10 @@ export default class BenchForm extends React.Component {
                     <input type="number" value={this.state.num_seats} onChange={this.handleInput('num_seats')} />
                 </label>
                 <label>Latitude:
-                    <input type="float" value={this.props.lat} onChange={this.handleInput('lat')} disabled/>
+                    <input type="float" value={this.props.lat} disabled/>
                 </label>
                 <label>Longitude:
-                    <input type="float" value={this.props.lng} onChange={this.handleInput('lng')} disabled/>
+                    <input type="float" value={this.props.lng} disabled/>
                 </label>
                 <input type="submit" value='Add Bench' onClick={this.handleSubmit}/>
             </form>
