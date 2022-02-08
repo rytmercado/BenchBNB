@@ -1,12 +1,10 @@
 class Api::BenchesController < ApplicationController
     def index
-        # p params[:bounds]
         @benches = Bench.in_bounds(params['filters']['bounds'])
         render :index
     end
 
     def create
-        # debugger
         @bench = Bench.new(bench_params)
 
         if @bench.save
@@ -19,7 +17,7 @@ class Api::BenchesController < ApplicationController
     private
 
     def bench_params
-        params.require(:bench).permit(:description, :num_seats, :lat, :lng)
+        params.require(:bench).permit(:description, :num_seats, :lat, :lng, :max_seating, :min_seating)
     end
 
 end
