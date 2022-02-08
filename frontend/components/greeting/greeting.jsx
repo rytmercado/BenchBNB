@@ -18,8 +18,9 @@ class Greeting extends React.Component{
       </div>
     ) : (
       <div>
-        <Link to='/signup'>Sign up</Link>
         <Link to='/login'>Log in</Link>
+        {' or '}
+        <Link to='/signup'>Sign up!</Link>
       </div>
     ));
   }
